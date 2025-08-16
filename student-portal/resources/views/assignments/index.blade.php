@@ -7,6 +7,7 @@
             <a href="{{ route('assignments.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded">New Assignment</a>
         @endif
     </div>
+
     <div class="bg-white rounded-lg shadow divide-y">
         @foreach($assignments as $a)
         <div class="p-4 flex items-center justify-between">
@@ -15,7 +16,17 @@
                 <div class="text-sm text-gray-600">
                     By {{ $a->creator->name }} @if($a->due_date) • Due {{ $a->due_date }} @endif
                 </div>
+
+                {{-- View Submissions Link --}}
+                <div class="mt-1">
+                    @if(auth()->user()->isTeacher())
+                        <a href="{{ route('submissions.index', $a) }}" class="text-indigo-600 underline">View All Submissions</a>
+                    @else
+                        <a href="{{ route('submissions.show', $a) }}" class="text-indigo-600 underline">View My Submission</a>
+                    @endif
+                </div>
             </div>
+
             @if(auth()->user()->isTeacher())
             <div class="space-x-2">
                 <a href="{{ route('assignments.edit',$a) }}" class="px-3 py-1 bg-yellow-500 text-white rounded">Edit</a>
@@ -28,6 +39,7 @@
         </div>
         @endforeach
     </div>
+
     <div>{{ $assignments->links() }}</div>
 </div>
 @endsection
